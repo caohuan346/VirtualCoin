@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <scenes>
+        <!--Left View Controller-->
+        <scene sceneID="w6g-KL-47c">
+            <objects>
+                <tableViewController storyboardIdentifier="LeftViewController" id="PSE-h0-cu4" customClass="LeftViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7ez-Vd-rk7">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableHeaderView" contentMode="scaleToFill" id="xkw-jO-na0" userLabel="headView">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="leftCell" rowHeight="50" id="e6q-Pp-yUO" userLabel="Cell" customClass="LeftTableCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="e6q-Pp-yUO" id="rU7-tG-iVZ">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="member_info_icon_huankuan" translatesAutoresizingMaskIntoConstraints="NO" id="TNN-NZ-tcF" userLabel="icon">
+                                            <rect key="frame" x="20" y="15" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="WDA-VR-hAL"/>
+                                                <constraint firstAttribute="height" constant="20" id="qta-eC-8gM"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="帮助中心" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CkU-Cv-MX1">
+                                            <rect key="frame" x="64" y="12" width="170" height="25"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="h6s-vf-hEL"/>
+                                                <constraint firstAttribute="width" constant="170" id="vgu-cy-m8n"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.47843137250000001" green="0.47843137250000001" blue="0.47843137250000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="centerY" secondItem="TNN-NZ-tcF" secondAttribute="centerY" id="8W0-9o-x0l"/>
+                                        <constraint firstItem="TNN-NZ-tcF" firstAttribute="leading" secondItem="rU7-tG-iVZ" secondAttribute="leading" constant="20" id="ZXS-Al-R2z"/>
+                                        <constraint firstAttribute="centerY" secondItem="CkU-Cv-MX1" secondAttribute="centerY" id="dlV-g0-L8k"/>
+                                        <constraint firstItem="CkU-Cv-MX1" firstAttribute="leading" secondItem="TNN-NZ-tcF" secondAttribute="trailing" constant="24" id="yZ0-5d-0Qo"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="iconImageView" destination="TNN-NZ-tcF" id="Obt-br-k7R"/>
+                                    <outlet property="titleLabel" destination="CkU-Cv-MX1" id="qWl-Yi-YtE"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="PSE-h0-cu4" id="0EU-hO-xQQ"/>
+                            <outlet property="delegate" destination="PSE-h0-cu4" id="2S5-h0-11U"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="leftTableView" destination="7ez-Vd-rk7" id="Q0J-bn-vjS"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s2G-zz-jnC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-184" y="58"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="member_info_icon_huankuan" width="26" height="23"/>
+    </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
