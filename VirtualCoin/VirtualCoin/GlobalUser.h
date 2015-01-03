@@ -37,6 +37,10 @@
 @property (nonatomic,copy) NSString *credit;//credit 算力
 
 
+//other
+@property(nonatomic,copy)NSString *openUDID;
+
+//method
 -(void)fillInfoWithUserDic:(NSDictionary *)userDic userInfoDic:(NSDictionary *)userInfoDic;
 
 -(void)fillInfoWithInfoDic:(NSDictionary *)infoDic;

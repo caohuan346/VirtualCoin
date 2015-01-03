@@ -158,8 +158,8 @@
 
     cell.typeLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"wkType"]];//itemDic[@"wkType"];
     cell.amountLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"wkCoinNumber"]];//itemDic[@"wkCoinNumber"];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"wkCreateDate"]];
-    
+    cell.dateLabel.text = [[GlobalHandler sharedInstance] getDateStr:itemDic[@"wkCreateDate"]];
+    cell.timeLabel.text = [[GlobalHandler sharedInstance] getTimeStr:itemDic[@"wkCreateDate"]];
     
     return cell;
 }

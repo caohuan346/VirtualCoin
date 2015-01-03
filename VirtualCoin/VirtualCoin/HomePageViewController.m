@@ -7,8 +7,21 @@
 //
 
 #import "HomePageViewController.h"
+#import "MJRefresh.h"
+#import "AnnounceDetailViewController.h"
 
-@interface HomePageViewController ()
+@interface HomePageViewController (){
+    
+    int _tempPageIndex;
+    
+    int _pageCount;// 总页数
+    int _currPage;// 当前页数
+    
+    BOOL _isHeaderRereshing;
+    
+    NSDictionary *_detailDic;
+
+}
 
 @property(nonatomic,strong)NSMutableArray *recordArray;
 
@@ -22,9 +35,14 @@
     
     self.recordArray = [NSMutableArray array];
     
-    [self loadData];
+    _tempPageIndex  = 1;
     
-    [self loadAnnouncements];
+    _isHeaderRereshing = YES;
+    //[self loadData];
+    
+    [self setupRefresh];
+    
+    [self loadData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,7 +86,7 @@
 
 //获取公告
 -(void)loadAnnouncements {
-    NSDictionary *param = @{@"page":@1};
+    NSDictionary *param = @{@"page":@(_tempPageIndex)};
     [[VCAFManager sharedInstance] postHttpMethod:kHttpMethod_getPublicInfos parameters:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"%@",responseObject);
         
@@ -91,9 +109,29 @@
          
          */
     
-        [self.recordArray setArray:responseObject[@"publicMessages"]];
+        if(_isHeaderRereshing){
+            [self.recordArray setArray:responseObject[@"publicMessages"]];
+        }else{
+            [self.recordArray addObjectsFromArray:responseObject[@"publicMessages"]];
+        }
         
         [self.tableView reloadData];
+        
+        [self.tableView headerEndRefreshing];
+        [self.tableView footerEndRefreshing];
+        
+        /*
+         pageCount 总页数
+         currPage 当前页数
+         recharges充值记录集合
+         reMoney 充值金额
+         reType	充值类型 //1网银充值 2.支付宝充值
+         reStatus 状态 //1.成功 2.3代表未到账
+         reDate  充值时间（Long类型 需转换成String展示）
+         */
+        
+        _pageCount = [responseObject[@"pageCount"] intValue];
+        _currPage = [responseObject[@"currPage"] intValue];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error.userInfo);
@@ -117,7 +155,55 @@
 
 #pragma mark - tableView delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+     _detailDic = self.recordArray[indexPath.row];
+    [self performSegueWithIdentifier:@"toDetail" sender:self];
+}
+
+#pragma mark - MJRefresh
+/**
+ *  集成刷新控件
+ */
+- (void)setupRefresh
+{
+    [self.tableView addHeaderWithTarget:self action:@selector(headerRereshing)];
+    [self.tableView headerBeginRefreshing];
+    [self.tableView addFooterWithTarget:self action:@selector(footerRereshing)];
+}
+#pragma mark 开始进入刷新状态
+- (void)headerRereshing
+{
+    _isHeaderRereshing = YES;
     
+    _tempPageIndex = 1;
+    
+    [self loadAnnouncements];
+}
+
+- (void)footerRereshing
+{
+    //最后一页
+    if (_pageCount == _currPage) {
+        [[GlobalHandler sharedInstance] showAlertWithTitle:@"提示" message:@"已经是最后一页" okButtonTitle:@"确定" clickedHandle:^(NSInteger selectedIndex) {
+            
+        }];
+        [self.tableView headerEndRefreshing];
+        [self.tableView footerEndRefreshing];
+        return;
+    }
+    _isHeaderRereshing = NO;
+    
+    _tempPageIndex = _currPage + 1;
+    
+    [self loadAnnouncements];
+}
+
+#pragma mark - Segue
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"toDetail"]) {
+        AnnounceDetailViewController *detailCtl = segue.destinationViewController;
+        detailCtl.announceDetailDic = _detailDic;
+    }
 }
 
 @end

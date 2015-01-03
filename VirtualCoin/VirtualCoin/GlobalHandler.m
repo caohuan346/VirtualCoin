@@ -37,6 +37,13 @@
 }
 
 #pragma mark - AlertView
+
+- (void)showAlertWithMsg:(NSString *)msg{
+    [self showAlertWithTitle:@"提示" message:msg okButtonTitle:@"确定" clickedHandle:^(NSInteger selectedIndex) {
+        
+    }];
+}
+
 //单按钮
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message okButtonTitle:(NSString *)okButtonTitle clickedHandle:(AlertViewCompleteHandle)clickedHandle
 {
@@ -113,6 +120,18 @@
     NSString *fmtStr = [self.numberFormatter stringFromNumber:[NSNumber numberWithDouble:dbValue]];
     return [NSString stringWithFormat:@"%@圆",fmtStr];
 }
+
+- (NSString *) decimalwithFloatV:(float)floatV afterPoint:(int)position
+{
+    NSMutableString *str = [[NSMutableString alloc] initWithString:@"0."];
+    for (int i = 0; i<position; i++) {
+        [str appendString:@"0"];
+    }
+    [self.numberFormatter setPositiveFormat:str];
+    
+    return  [self.numberFormatter stringFromNumber:[NSNumber numberWithFloat:floatV]];
+}
+
 #pragma mark - date formate
 
 + (NSString *)morningOrAfternoon
@@ -130,6 +149,12 @@
     {
         return @"下午好！";
     }
+}
+
+-(NSString *)getFullDateStr:(NSString *)timestampStr{
+    NSDate *date  = [NSDate dateWithTimeIntervalSince1970:[timestampStr doubleValue] / 1000];
+    [self.dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    return [self.dateFormatter stringFromDate:date];
 }
 
 //获取时间：2014-12-28

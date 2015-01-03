@@ -25,6 +25,23 @@
 }
 
 -(id)initWithUrl:(NSString*)url{
+/*
+    NSDictionary *param = @{@"u":@(5*60*1000)};
+    [[VCAFManager sharedInstance] postHttpMethod:kHttpMethod_klineData parameters:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@",responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"%@",error.userInfo);
+    }];
+ */
+    
+    /*
+     Date,Open,High,Low,Close,Volume,Adj Close,
+     2014-12-26,43.29,44.20,42.50,44.01,5410400,44.01
+     
+     请求地址：timerCount.html
+     参数:1 u 	 时间段分为：5分钟 15分钟 30分钟 1天
+     */
+    
     if (self){
         // 取缓存的每天数据
         NSArray *tempArray = (NSArray*)[commond getUserDefaults:@"daydatas"];
@@ -32,10 +49,13 @@
             self.dayDatas = tempArray;
         }
         NSArray *lines = (NSArray*)[commond getUserDefaults:[commond md5HexDigest:url]];
+        
         if (lines.count>0) {
             [self changeData:lines];
         }else{
             NSLog(@"url:%@",url);
+            /*
+
             NSURL *nurl = [NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:nurl];
             [request setTimeOutSeconds:30];
@@ -43,6 +63,8 @@
             [request startSynchronous];
             // 加载完成执行此块
             [self Finished:request];
+             
+             */
         }
     }
     return self;

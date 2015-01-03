@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "LeftViewController.h"
 #import "IOTester.h"
+#import "OpenUDID.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -32,6 +34,8 @@
     //18926575205 123456
     self.globalUser.password = @"123456";
     self.globalUser.mobile = @"18926575205";
+
+    self.globalUser.openUDID = @"CE3647E513EA8E9B63A8213392E699CC149AC54C74D0CE2EB4471F687F98EC7B5D544AE96C97303A766E216E0D741C98";//[OpenUDID value];
     
     IOTester *tester = [[IOTester alloc]init];
     [tester test];
@@ -68,7 +72,7 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    
+    /*
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"LeftSlider" bundle:nil];
     LeftViewController *leftVC = [storyboard instantiateViewControllerWithIdentifier:@"LeftViewController"];
     _sliderViewController = [[MMDrawerController alloc]initWithCenterViewController:nav leftDrawerViewController:leftVC];
@@ -76,8 +80,12 @@
     _sliderViewController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
     _sliderViewController.closeDrawerGestureModeMask = MMCloseDrawerGestureModeAll;
     self.window.rootViewController = _sliderViewController;
+    */
     
-    
+    UIStoryboard *initSB = [UIStoryboard storyboardWithName:@"Init" bundle:nil];
+    LoginViewController *loginVC = [initSB instantiateViewControllerWithIdentifier:@"LoginViewController"];
+    UINavigationController *loginNav = [[UINavigationController alloc] initWithRootViewController:loginVC];
+   self.window.rootViewController = loginNav;
     
     [self.window makeKeyAndVisible];
 }

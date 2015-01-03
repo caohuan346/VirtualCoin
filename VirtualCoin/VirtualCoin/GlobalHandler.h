@@ -24,6 +24,8 @@ typedef void(^AlertViewCompleteHandle)(NSInteger selectedIndex);
 
 #pragma mark - alertView
 
+- (void)showAlertWithMsg:(NSString *)msg;
+
 /**
  *  简单alert
  */
@@ -101,6 +103,9 @@ typedef void(^AlertViewCompleteHandle)(NSInteger selectedIndex);
 - (NSString *)handleStringWithoutSymbolFromCurrencyString:(NSString *)currencyStr;
 
 - (NSString *)handleChineseUpperCaseStringFromCurrencyDouble:(double)dbValue;
+
+//四舍五入
+- (NSString *) decimalwithFloatV:(float)floatV afterPoint:(int)position;
 #pragma mark - date format
 
 /**
@@ -110,6 +115,8 @@ typedef void(^AlertViewCompleteHandle)(NSInteger selectedIndex);
  */
 + (NSString *)morningOrAfternoon;
 
+//2015-01-02 19:37:57
+-(NSString *)getFullDateStr:(NSString *)timestampStr;
 //获取时间：2014-12-28
 -(NSString *)getDateStr:(NSString *)timestampStr;
 //获取时间：17:05:45

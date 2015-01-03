@@ -59,7 +59,8 @@
     
 #warning mark - msg
     //mac：CE3647E513EA8E9B63A8213392E699CC149AC54C74D0CE2EB4471F687F98EC7B5D544AE96C97303A766E216E0D741C98
-    NSDictionary *loginDic = @{@"Mobile":@"18926575205",@"PassWord":@"123456",@"MAC":@"CE3647E513EA8E9B63A8213392E699CC149AC54C74D0CE2EB4471F687F98EC7B5D544AE96C97303A766E216E0D741C98"};
+    /*
+    NSDictionary *loginDic = @{@"Mobile":@"18926575205",@"PassWord":@"123456",@"MAC":SharedAppDelegate.globalUser.openUDID};
     [[VCAFManager sharedInstance] postHttpMethod:kHttpMethod_login parameters:loginDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         //设置cookie
@@ -73,7 +74,7 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
          NSLog(@"%@",error.userInfo);
     }];
-    
+    */
     
     //2.注册接口     kHttpMethod_register @"register"
     /*

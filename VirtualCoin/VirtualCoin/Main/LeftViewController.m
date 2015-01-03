@@ -9,6 +9,7 @@
 #import "LeftViewController.h"
 #import "LeftTableCell.h"
 #import "AppDelegate.h"
+#import "LoginViewController.h"
 
 #define kTopHeaderHeight 100.0f
 
@@ -45,9 +46,9 @@
     
     [self updateDataWithNotification];
     
-    normalImageList = [[NSMutableArray alloc]initWithObjects:@"ommon_ico_help",@"ommon_ico_opinion",@"ommon_ico_remove",@"ommon_ico_site",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap", nil];
-    selectImageList = [[NSMutableArray alloc]initWithObjects:@"ommon_ico_help_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap", nil];
-    textList = [[NSMutableArray alloc]initWithObjects:@"幸运首页",@"行情中心",@"交易中心",@"充值RMB",@"提现RMB",@"矿机中心",@"资产信息",@"幸运转盘",@"排行榜",@"设置", nil];
+    normalImageList = [[NSMutableArray alloc]initWithObjects:@"ommon_ico_help",@"ommon_ico_opinion",@"ommon_ico_remove",@"ommon_ico_site",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_site_tap", nil];
+    selectImageList = [[NSMutableArray alloc]initWithObjects:@"ommon_ico_help_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_opinion_tap",@"ommon_ico_remove_tap",@"ommon_ico_site_tap",@"ommon_ico_site_tap", nil];
+    textList = [[NSMutableArray alloc]initWithObjects:@"幸运首页",@"行情中心",@"交易中心",@"充值RMB",@"提现RMB",@"矿机中心",@"资产信息",@"幸运转盘",@"排行榜",@"设置",@"退出", nil];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -144,7 +145,9 @@
             break;
         case 7:
         {
-
+            UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            pushVC = [storyBoard instantiateViewControllerWithIdentifier:@"RewardViewController"];
+            [appDelegate.sliderViewController closeDrawerAnimated:YES completion:nil];
             [appDelegate.sliderViewController closeDrawerAnimated:YES completion:nil];
         }
             break;
@@ -161,6 +164,35 @@
             pushVC = [storyBoard instantiateViewControllerWithIdentifier:@"SettingViewController"];
             
             [appDelegate.sliderViewController closeDrawerAnimated:YES completion:nil];
+        }
+            break;
+        case 10:
+        {
+            //退出
+            [[GlobalHandler sharedInstance] showAlertWithTitle:@"提示" message:@"确定退出吗?" oneButtonTitle:@"确定" anotherButtonTitle:@"取消" clickedHandle:^(NSInteger selectedIndex) {
+                
+                if (selectedIndex == 0) {
+                    [[VCAFManager sharedInstance] postHttpMethod:kHttpMethod_loginOut parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                        NSLog(@"%@",responseObject);
+                        
+                        //set cookie nil
+                        [VCAFManager sharedInstance].JSESSIONID = nil;
+                        
+                        //go to loginCtl
+                        UIStoryboard *initSB = [UIStoryboard storyboardWithName:@"Init" bundle:nil];
+                        LoginViewController *loginVC = [initSB instantiateViewControllerWithIdentifier:@"LoginViewController"];
+                        UINavigationController *loginNav = [[UINavigationController alloc] initWithRootViewController:loginVC];
+                        SharedAppDelegate.window.rootViewController = loginNav;
+                        
+                        [[GlobalHandler sharedInstance] showAlertWithMsg:responseObject[@"rtMsg"]];
+                    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                        NSLog(@"%@",error.userInfo);
+                    }];
+                }
+                
+            }];
+            
+            //[appDelegate.sliderViewController closeDrawerAnimated:YES completion:nil];
         }
             break;
         default:

@@ -22,6 +22,8 @@
 
 @property(nonatomic,strong)NSMutableArray *dataArray;
 
+@property(nonatomic,strong)NSArray *btnArray;
+
 @end
 
 @implementation ChargeViewController
@@ -30,6 +32,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.dataArray = [NSMutableArray array];
+    
+    self.btnArray = @[self.btn50,self.btn100,self.btn500,self.btn1000];
+    
+    
     _tempPageIndex  = 1;
     
     _isHeaderRereshing = YES;
@@ -123,10 +129,17 @@
      */
     
     NSDictionary *itemDic = self.dataArray[indexPath.row];
-    cell.dateLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"reDate"]];//itemDic[@"reDate"];
-    cell.timeLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"reDate"]];//itemDic[@"reDate"];
+    cell.dateLabel.text = [[GlobalHandler sharedInstance] getDateStr:itemDic[@"reDate"]];//itemDic[@"reDate"];
+    cell.timeLabel.text = [[GlobalHandler sharedInstance] getTimeStr:itemDic[@"reDate"]];//itemDic[@"reDate"];
     
-    cell.typeLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"reType"]];//itemDic[@"reType"];
+    //1网银充值 2.支付宝充值
+    int reType = [itemDic[@"reType"] intValue];
+    if (reType == 1) {
+         cell.typeLabel.text = @"网银";
+    }else if (reType == 2) {
+        cell.typeLabel.text = @"支付宝";
+    }
+    
     cell.amountLabel.text = [NSString stringWithFormat:@"%@",itemDic[@"reMoney"]];
     
     //reStatus 状态 //1.成功 2.3代表未到账
@@ -177,6 +190,44 @@
     _tempPageIndex = _currPage + 1;
     
     [self loadData];
+}
+
+#pragma mark - action
+- (IBAction)selectAmount:(id)sender {
+    UIButton *selectBtn = (UIButton *)sender;
+    self.amountTF.text =  selectBtn.titleLabel.text;
+    
+    for (UIButton *btn in self.btnArray) {
+        if ([btn isEqual:selectBtn]) {
+            [btn setImage:[UIImage imageNamed:@"common_radio_tap"] forState:UIControlStateNormal];
+        }else{
+            [btn setImage:[UIImage imageNamed:@"common_radio"] forState:UIControlStateNormal];
+        }
+    }
+}
+- (IBAction)netBankCharge:(id)sender {
+
+}
+
+- (IBAction)alipay:(id)sender {
+    [GlobalHandler showActivityViewForView:self.view];
+    
+    NSDictionary *paras = @{@"reMoney":self.amountTF.text,
+                            @"reType":@2};
+
+    
+    [[VCAFManager sharedInstance] postHttpMethod:kHttpMethod_addRec parameters:paras success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [GlobalHandler dismissActivityViewAnimated:YES];
+        //uid pid
+        if ([responseObject[@"rtCode"] intValue] == 0) {
+            
+        }
+        //[[GlobalHandler sharedInstance] showAlertWithMsg:responseObject[@"rtMsg"]];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        [GlobalHandler dismissActivityViewAnimated:YES];
+        
+    }];
 }
 
 @end

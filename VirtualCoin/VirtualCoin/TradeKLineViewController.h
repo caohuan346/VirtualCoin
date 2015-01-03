@@ -22,4 +22,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *tranCountLabel;
 
+@property (weak, nonatomic) IBOutlet UISegmentedControl *kLineTimeSeg;
+
+- (IBAction)segmentAction:(id)sender;
 @end

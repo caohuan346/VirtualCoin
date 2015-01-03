@@ -53,7 +53,7 @@
 #define kHttpMethod_lastestPrice @"lastestPrice.html"
 
 //10.获取K线走势图接口
-#define kHttpMethod_timerCount @"timerCount.html"
+#define kHttpMethod_klineData @"klineData.html"
 
 //11.实时交易信息
 #define kHttpMethod_tranInfos @"tranInfos.html"
@@ -125,6 +125,9 @@
 #define kHttpMethod_loginOut @"loginOut.html"
 
 /////////////////////////////////////////// 界面配置 ////////////////////////////////////////////
+//绿色
+#define kThemeGreenColor [UIColor colorWithRed:11.0/255.0f green:112.0/255.0f blue:91.0/255.0f alpha:1]
+
 //背景色
 #define kThemeBackGroundColor [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1]
 //主题红色
