@@ -37,9 +37,71 @@
     
 //    data = @[@"一等奖",@"二等奖",@"三等奖",@"再接再厉"];
     
-    data = @[@"1",@"2",@"3",@"4",@"5",@"6"];
+    data = @[@"key_1",@"key_2",@"key_3",@"key_4",@"key_5",@"key_6"];
     
     //中奖和没中奖之间的分隔线设有2个弧度的盲区，指针不会旋转到的，避免抽奖的时候起争议。
+    miss = @[
+             @{@"min": @47,
+               @"max":@89
+               },
+             @{@"min": @90,
+               @"max":@133
+               },
+             @{@"min": @182,
+               @"max":@223
+               },
+             @{@"min": @272,
+               @"max":@314
+               },
+             @{@"min": @315,
+               @"max":@358
+               }
+             ];
+    
+    
+    awards = @{
+               @"key_1": @[
+                       @{
+                           @"min": @152,
+                           @"max":@208
+                           }
+                       ],
+               @"key_2": @[
+                       @{
+                           @"min": @212,
+                           @"max":@268
+                           }
+                       ],
+               @"key_3": @[
+                       @{
+                           @"min": @272,
+                           @"max":@328
+                           }
+                       ],
+               @"key_4": @[
+                       @{
+                           @"min": @0,
+                           @"max":@28
+                           },
+                       @{
+                           @"min": @332,
+                           @"max":@360
+                           }
+                       ],
+               @"key_5": @[
+                       @{
+                           @"min": @32,
+                           @"max":@88
+                           }
+                       ],
+               @"key_6": @[
+                       @{
+                           @"min": @92,
+                           @"max":@148
+                           }
+                       ],
+               };
+    /*
     miss = @[
              @{@"min": @47,
                @"max":@89
@@ -80,6 +142,7 @@
                        ],
                @"再接再厉":miss
                };
+     */
 }
 
 - (void)didReceiveMemoryWarning {
@@ -90,6 +153,7 @@
 
 - (IBAction)start:(id)sender {
     
+    
     [[GlobalHandler sharedInstance] showAlertWithTitle:@"温馨提示" message:@"每次抽奖将耗费1XYB，确定抽奖吗？"oneButtonTitle:@"试一试" anotherButtonTitle:@"算了" clickedHandle:^(NSInteger selectedIndex) {
         if(selectedIndex == 0){
             
@@ -97,20 +161,26 @@
             [[VCAFManager sharedInstance] postHttpMethod:kHttpMethod_userLuckLy parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSLog(@"%@",responseObject);
                 
-                _pid = [responseObject[@"pid"] intValue];
-
-                //动画开始
-                CABasicAnimation* rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-                endValue = [self fetchResult];
-                rotationAnimation.delegate = self;
-                rotationAnimation.fromValue = @(startValue);
-                rotationAnimation.toValue = @(endValue);
-                rotationAnimation.duration = 7.0f;
-                rotationAnimation.autoreverses = NO;
-                rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                rotationAnimation.removedOnCompletion = NO;
-                rotationAnimation.fillMode = kCAFillModeBoth;
-                [_rotateStaticImageView.layer addAnimation:rotationAnimation forKey:@"revItUpAnimation"];
+                if ([responseObject[@"rtCode"] intValue] == 0) {
+                    _pid = [responseObject[@"pid"] intValue];
+                    
+                    //动画开始
+                    CABasicAnimation* rotationAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+                    endValue = [self fetchResult];
+                    rotationAnimation.delegate = self;
+                    rotationAnimation.fromValue = @(startValue);
+                    rotationAnimation.toValue = @(endValue);
+                    rotationAnimation.duration = 7.0f;
+                    rotationAnimation.autoreverses = NO;
+                    rotationAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                    rotationAnimation.removedOnCompletion = NO;
+                    rotationAnimation.fillMode = kCAFillModeBoth;
+                    [_rotateStaticImageView.layer addAnimation:rotationAnimation forKey:@"revItUpAnimation"];
+                    
+                }
+                else {
+                    [[GlobalHandler sharedInstance] showAlertWithMsg:responseObject[@"rtMsg"]];
+                }
                 
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 NSLog(@"%@",error.userInfo);
@@ -118,18 +188,25 @@
 
         }
     }];
+    
 }
 
 -(float)fetchResult{
     
     //todo: fetch result from remote service
     srand((unsigned)time(0));
-    random = rand() %4;
-    int i = random;
+
+    /*
+     random = rand() %4;
+     int i = random;
     result = data[i];  //TEST DATA ,shoud fetch result from remote service
     if (_labelTextField.text != nil && ![_labelTextField.text isEqualToString:@""]) {
         result = _labelTextField.text;
     }
+     */
+    result = [NSString stringWithFormat:@"key_%d",_pid];
+    
+
     for (NSString *str in [awards allKeys]) {
         if ([str isEqualToString:result]) {
             NSDictionary *content = awards[str][0];
@@ -144,6 +221,7 @@
         }
     }
     
+    /*
     random = rand() %5;
     i = random;
     NSDictionary *content = miss[i];
@@ -152,8 +230,10 @@
     
     srand((unsigned)time(0));
     random = rand() % (max - min) +min;
+     return radians(random + 360*5);
+     */
     
-    return radians(random + 360*5);
+    return 0.0f;
     
 }
 
